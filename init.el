@@ -32,7 +32,8 @@
   (recursive-edit))
 (add-hook 'ace-jump-mode-end-hook 'exit-recursive-edit)
 
-(tool-bar-mode -1)
+(if tool-bar-mode (tool-bar-mode -1))
+(if menu-bar-mode (menu-bar-mode -1))
 (global-auto-revert-mode 1)
 (setq inhibit-startup-screen t)
 (setq inhibit-startup-message t)
@@ -57,6 +58,9 @@
    '(lambda ()
       (local-set-key '[(tab)] 'comint-dynamic-complete)
       (rename-buffer (generate-new-buffer-name "shell"))))
+
+(autoload 'lua-mode "lua-mode" "Lua editing mode." t)
+(setq lua-indent-level 3)
 
 ;;set modes
 (setq auto-mode-alist
@@ -186,7 +190,6 @@
 ;;
 (setq binary-process-input t) 
 (setq w32-quote-process-args ?\") 
-(setq shell-file-name "bash") ;; or sh if you rename your bash executable to sh. 
 (setenv "SHELL" shell-file-name) 
 (setq explicit-shell-file-name shell-file-name) 
 (setq explicit-sh-args '("-login" "-i"))
