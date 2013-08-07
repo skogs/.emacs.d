@@ -454,7 +454,16 @@ top is unset, the user will be queried to change the current top directory."
   (let* ((top (tree-get-top arg "Top dir for grep: "))
 	 (expr (read-string (concat "Grep under (" top ") : ")))
 	 (file (tree-make-listing (tree-files top))))
-    (funcall grepmode (concat "xargs -0 grep -n " expr " < " file))))
+    (funcall grepmode (concat "xargs -0 grep -i -n " expr " < " file))))
+
+(defun tree-grepx (arg)
+  "Search for regex in a current tree.  If ARG is given, selects `tree-top'."
+  (interactive "P")
+  (require grepmode)
+  (let* ((top (tree-get-top nil "Top dir for grep: "))
+	 (file (tree-make-listing (tree-files top))))
+    (funcall grepmode (concat "xargs -0 grep -i -n " arg " < " file))))
+
 
 (defun tree-find-file (arg)
   "Find file in current tree.  If ARG is given, selects `tree-top'."
@@ -539,6 +548,11 @@ searched.  This should be bound to a mouse event, as in:
     ;; go to file if it exists
     (tree-find-file-by-name filename)))
 
+(require 'thingatpt)
+(defun tree-grep-at-point ()
+  "Visit file named by filename at point."
+  (interactive)
+  (tree-grepx (thing-at-point 'symbol)))
 
 (provide 'tree)
 

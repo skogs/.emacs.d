@@ -7,7 +7,7 @@
 (when (>= emacs-major-version 23)
    (cua-mode t)
    (ido-mode t)
-   (ido-everywhere t) 
+   (ido-everywhere t)
    (setq ido-enable-flex-matching t) ; fuzzy matching is a must have
 )
 
@@ -18,7 +18,13 @@
   (require 'evil)
   (evil-mode 1)
   (setq evil-default-cursor t)
+  (setq evil-want-fine-undo t)
+  (evil-set-toggle-key "C-<escape>")
 )
+
+(defun init ()
+   (interactive)
+   (find-file "~/.emacs.d/init.el"))
 
 (autoload 'ace-jump-mode "ace-jump-mode" "Emacs quick move minor mode" t)
 
@@ -41,7 +47,7 @@
 (setq auto-save-default   nil) ; Don't want any auto saving
 (show-paren-mode t) ; match brackets
 (setq-default cursor-type 'bar)
-(defalias 'yes-or-no-p 'y-or-n-p) 
+(defalias 'yes-or-no-p 'y-or-n-p)
 
 (defun my-c-mode-common-hook ()
   (setq c-basic-offset 4)
@@ -118,7 +124,7 @@
     t))
 
 (setq hippie-expand-try-functions-list
-   '(  
+   '(
      try-expand-dabbrev-visible
      try-expand-dabbrev-from-kill
      try-expand-dabbrev-all-buffers
@@ -186,27 +192,38 @@
                (directory-files dir t "^.*\.el$"))
        dir))
 
+(defun shell-bottom (arg)
+  (interactive "p")
+  (if (eq arg 1)
+      (shell)
+    (shell (concat "AltShell-" (number-to-string arg))))
+  (goto-char (point-max)))
+
 ;; Let's use CYGWIN bash...
 ;;
-(setq binary-process-input t) 
-(setq w32-quote-process-args ?\") 
-(setenv "SHELL" shell-file-name) 
-(setq explicit-shell-file-name shell-file-name) 
+(setq binary-process-input t)
+(setq w32-quote-process-args ?\")
+(setenv "SHELL" shell-file-name)
+(setq explicit-shell-file-name shell-file-name)
 (setq explicit-sh-args '("-login" "-i"))
 
 ; Customized key-bindings go below
 (global-set-key (kbd "<tab>")	'smart-tab)                ; Tab does auto-completion
 (global-set-key "\t"         'smart-tab)                ; Tab does auto-completion
                                                            ; based on words from all buffers and later tags
-(global-set-key (kbd "<f6>")    'query-replace-regexp)     ; F6 - Handy way to start find-and-replace
-(global-set-key (kbd "C-<tab>") 'ido-switch-buffer)        ; F6 - Handy way to s
-(global-set-key [(control tab)] 'ido-switch-buffer)  
+(global-set-key (kbd "<f1>")    'delete-other-windows)
+(global-set-key (kbd "<f4>")    'query-replace-regexp)
+(global-set-key (kbd "<f5>")   'tree-grep-at-point)
+(global-set-key (kbd "<f6>")   'tree-find-file)
+(global-set-key (kbd "<S-6>") 'tree-hyperjump)
+(global-set-key (kbd "<f12>")    'kill-this-buffer)
 
-(global-set-key (kbd "<f12>")   'tree-find-file)           ; F12 to find a file in the project
-(global-set-key (kbd "C-c C-p") 'tree-find-file)           ; F12 to find a file in the project
-(global-set-key (kbd "C-c C-g") 'tree-grep)           ; F12 to find a file in the project
-(global-set-key (kbd "<S-f12>") 'tree-hyperjump)
-(global-set-key (kbd "<f11>")   'tree-grep)                ; F11 grep over all project files
+(global-set-key (kbd "C-<tab>") 'ido-switch-buffer)
+(global-set-key [(control tab)] 'ido-switch-buffer)
+
+(global-set-key (kbd "C-c C-p") 'tree-find-file)
+(global-set-key (kbd "C-c C-g") 'tree-grep)
+(global-set-key (kbd "C-x C-p") 'tree-find-file)
+(global-set-key (kbd "C-x C-g") 'tree-grep)
 
 (global-set-key (kbd "M-?")	'etags-select-find-tag-at-point) ; M-? finds all occurances of a tag
-
