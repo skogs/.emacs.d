@@ -6,6 +6,7 @@
 
 (when (>= emacs-major-version 23)
    (cua-mode t)
+   (winner-mode t)
    (ido-mode t)
    (ido-everywhere t)
    (setq ido-enable-flex-matching t) ; fuzzy matching is a must have
@@ -26,6 +27,7 @@
    (interactive)
    (find-file "~/.emacs.d/init.el"))
 
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
 (autoload 'ace-jump-mode "ace-jump-mode" "Emacs quick move minor mode" t)
 
 ;;If you use evil
@@ -199,6 +201,13 @@
     (shell (concat "AltShell-" (number-to-string arg))))
   (goto-char (point-max)))
 
+(defun toggle-windows ()
+  (interactive)
+  (if (eq (count-windows) 1)
+      (winner-undo)
+    (delete-other-windows)))
+
+
 ;; Let's use CYGWIN bash...
 ;;
 (setq binary-process-input t)
@@ -211,7 +220,7 @@
 (global-set-key (kbd "<tab>")	'smart-tab)                ; Tab does auto-completion
 (global-set-key "\t"         'smart-tab)                ; Tab does auto-completion
                                                            ; based on words from all buffers and later tags
-(global-set-key (kbd "<f1>")    'delete-other-windows)
+(global-set-key (kbd "<f1>")    'toggle-windows)
 (global-set-key (kbd "<f4>")    'query-replace-regexp)
 (global-set-key (kbd "<f5>")   'tree-grep-at-point)
 (global-set-key (kbd "<f6>")   'tree-find-file)
@@ -225,5 +234,6 @@
 (global-set-key (kbd "C-c C-g") 'tree-grep)
 (global-set-key (kbd "C-x C-p") 'tree-find-file)
 (global-set-key (kbd "C-x C-g") 'tree-grep)
+(global-set-key (kbd "C-`") 'other-window)
 
 (global-set-key (kbd "M-?")	'etags-select-find-tag-at-point) ; M-? finds all occurances of a tag
